@@ -26,7 +26,8 @@ class TekDriveClient:
 
     def create_file(self, name: str, num_chunks: int) -> dict:
         """
-        Docs: https://initialstate.github.io/oxford/#api-File-CreateFile
+        Create the file record in TekDrive
+        https://initialstate.github.io/oxford/#api-File-CreateFile
         """
         create_file_url = f"{self.base_url}/file"
         headers = {"X-IS-AK": self.access_key}
@@ -63,7 +64,8 @@ class TekDriveClient:
         self, upload_id: str, complete_upload_url: str, parts: List[str]
     ) -> None:
         """
-        Docs: https://initialstate.github.io/oxford/#api-File-CompleteMultipartFileUpload
+        Complete the multipart upload after all parts have been successfully uploaded
+        https://initialstate.github.io/oxford/#api-File-CompleteMultipartFileUpload
         """
         headers = {"X-IS-AK": self.access_key}
         body = {"uploadId": upload_id, "parts": parts}
@@ -155,12 +157,11 @@ def do_multipart_upload(file: str, file_size_mb: float) -> None:
     print(f"Complete upload id: {upload_id} \n")
     client.complete_multipart_upload(upload_id, complete_upload_url, parts)
 
-    print(f"Successfully completed multipart upload for file: {file_id}")
+    print(f"Successfully completed multipart upload for file")
+    print(f"View it here: https://drive.tekcloud.com/#/f/{file_id}")
 
 
-def main(file: str) -> None:
-    file = args.file
-
+def main(*args, file: str) -> None:
     if not os.path.isfile(file):
         print("Input file does not exist")
         sys.exit()
@@ -179,4 +180,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="The file to be upload")
     args = parser.parse_args()
-    main(*args.__dict__)
+    main(**args.__dict__)
