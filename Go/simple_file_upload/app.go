@@ -1,15 +1,15 @@
 package main
 
 import (
-    "bytes"
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
-    "io/ioutil"
-    "log"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
-    "time"
+	"time"
 )
 
 var baseUrl = "https://drive.api.tekcloud.com/"
@@ -48,16 +48,16 @@ type CreateFileResponse struct {
 }
 
 type FileMeta struct {
-    Name string `json:"name"`
+	Name string `json:"name"`
 }
 
 func createFile(fileName string) CreateFileResponse {
-    client := http.Client{
+	client := http.Client{
 		Timeout: time.Second * 2,
 	}
 	
 	fileMeta := FileMeta{fileName}
-    jsonReq, err := json.Marshal(fileMeta)
+	jsonReq, err := json.Marshal(fileMeta)
 
 	req, err := http.NewRequest(http.MethodPost, baseUrl + "/file", bytes.NewBuffer(jsonReq))
 	if err != nil {
@@ -98,13 +98,13 @@ func uploadFile(uploadUrl string, filePath string) {
 	}
 
 	localFile, err := os.Open(filePath)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer localFile.Close()
-    req, err := http.NewRequest("PUT", uploadUrl, localFile)
-    if err != nil {
-        log.Fatal(err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer localFile.Close()
+	req, err := http.NewRequest("PUT", uploadUrl, localFile)
+	if err != nil {
+		log.Fatal(err)
 	}
 	
 	// If Content-Length is not set the request will be sent with Transfer-Encoding: chunked
@@ -113,9 +113,9 @@ func uploadFile(uploadUrl string, filePath string) {
 	req.ContentLength = info.Size()
 	req.Header.Set("Content-Type", "application/octet-stream")
 
-    res, err := client.Do(req)
-    if err != nil {
-        log.Fatal(err)
+	res, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
 	}
 	defer res.Body.Close()
 
@@ -133,12 +133,12 @@ func main() {
 
 	fmt.Println("Uploading file", *filePathPtr, "as", *fileNamePtr)
 
-    // create file meta record
-    createResp := createFile(*fileNamePtr)
+	// create file meta record
+	createResp := createFile(*fileNamePtr)
 
 	// upload file contents
 	uploadFile(createResp.UploadURL, *filePathPtr)
 
-    log.Println("Succesfully uploaded file")
-    log.Println("View it here: " + "https:drive.tekcloud.com/#/f/" + createResp.File.ID)
+	log.Println("Succesfully uploaded file")
+	log.Println("View it here: " + "https:drive.tekcloud.com/#/f/" + createResp.File.ID)
 }
