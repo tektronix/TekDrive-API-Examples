@@ -139,6 +139,6 @@ func main() {
 	// upload file contents
 	uploadFile(createResp.UploadURL, *filePathPtr)
 
-	log.Println("Succesfully uploaded file")
-	log.Println("View it here: " + "https:drive.tekcloud.com/#/f/" + createResp.File.ID)
+	log.Println("Successfully uploaded file")
+	log.Println("View it here: " + "https://drive.tekcloud.com/#/f/" + createResp.File.ID)
 }
