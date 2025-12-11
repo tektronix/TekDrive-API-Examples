@@ -57,13 +57,13 @@ def main(*args, file_path: str, name: str) -> None:
     create_response = create_file_record(name)
     upload(create_response["uploadUrl"], file_path)
 
-    print("File succesfully uploaded")
+    print("File successfully uploaded")
     print(f"View it here: https://drive.tekcloud.com/#/f/{create_response['file']['id']}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("file_path", help="The file to be upload")
+    parser.add_argument("file_path", help="The file to be uploaded")
     parser.add_argument("--name", help="Filename override", default="test-simple-file-upload")
     args = parser.parse_args()
     main(**args.__dict__)
